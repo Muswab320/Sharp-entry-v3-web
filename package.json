@@ -1,0 +1,13 @@
+{
+  "name": "sharp-entry-v3",
+  "version": "1.0.0",
+  "description": "Gold XAUUSD sharp entry scanner with iPhone push notifications",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "web-push": "^3.6.7"
+  }
+}
