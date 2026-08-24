@@ -1,0 +1,16 @@
+{
+  "name": "sharp-entry-v3",
+  "version": "3.0.0",
+  "description": "XAUUSD Sharp Entry Scanner",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "web-push": "^3.6.7"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
