@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07111f">
+
+<link rel="manifest" href="/manifest.json">
+
+<title>Gold Sharp Entry V3</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:#07111f;
+ color:#fff;
+}
+
+.app{
+ max-width:600px;
+ margin:auto;
+ padding:22px 16px 50px;
+}
+
+h1{
+ margin-bottom:4px;
+}
+
+.sub{
+ color:#8ea2b8;
+ margin-bottom:25px;
+}
+
+.card{
+ background:#0d1b2b;
+ border:1px solid #20344a;
+ border-radius:16px;
+ padding:18px;
+ margin-bottom:15px;
+}
+
+label{
+ display:block;
+ color:#9eb0c3;
+ margin:12px 0 7px;
+}
+
+input{
+ width:100%;
+ padding:14px;
+ border-radius:10px;
+ border:1px solid #30475f;
+ background:#071421;
+ color:white;
+ font-size:16px;
+}
+
+button{
+ width:100%;
+ padding:15px;
+ border:0;
+ border-radius:11px;
+ margin-top:12px;
+ font-weight:bold;
+ font-size:16px;
+ cursor:pointer;
+}
+
+.scan{
+ background:#ffd43b;
+ color:#111;
+}
+
+.notify{
+ background:#21c78b;
+ color:#03130d;
+}
+
+.test{
+ background:#2979ff;
+ color:white;
+}
+
+.signal{
+ text-align:center;
+ font-size:38px;
+ font-weight:bold;
+ color:#ffd43b;
+ margin:10px 0;
+}
+
+.status{
+ text-align:center;
+ color:#9eb0c3;
+}
+
+.grid{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:10px;
+}
+
+.box{
+ background:#071421;
+ border-radius:10px;
+ padding:12px;
+}
+
+.box small{
+ color:#7f94aa;
+ display:block;
+ margin-bottom:5px;
+}
+
+.value{
+ font-weight:bold;
+}
+
+.online{
+ color:#21c78b;
+}
+
+.note{
+ color:#8ea2b8;
+ line-height:1.5;
+ font-size:14px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<h1>Gold Sharp Entry V3</h1>
+
+<div class="sub">
+XAU/USD • H1 Trend • M15 Structure • M5 Trigger
+</div>
+
+<div class="card">
+
+<div>
+Server Scanner:
+<strong id="serverStatus" class="online">● CHECKING...</strong>
+</div>
+
+<label>Symbol</label>
+<input id="symbol" value="XAU/USD" readonly>
+
+<button class="scan" onclick="scanMarket()">
+Scan Gold Now
+</button>
+
+<button class="notify" onclick="enableNotifications()">
+🔔 Enable iPhone Notifications
+</button>
+
+<button class="test" onclick="testNotification()">
+Send Test Notification
+</button>
+
+</div>
+
+<div class="card">
+
+<div style="color:#8ea2b8">
+CURRENT SIGNAL
+</div>
+
+<div id="signal" class="signal">
+WAIT
+</div>
+
+<div id="status" class="status">
+Waiting for market analysis
+</div>
+
+</div>
+
+<div class="grid">
+
+<div class="box">
+<small>Entry</small>
+<div id="entry" class="value">—</div>
+</div>
+
+<div class="box">
+<small>Stop Loss</small>
+<div id="sl" class="value">—</div>
+</div>
+
+<div class="box">
+<small>TP1</small>
+<div id="tp1" class="value">—</div>
+</div>
+
+<div class="box">
+<small>TP2</small>
+<div id="tp2" class="value">—</div>
+</div>
+
+<div class="box">
+<small>TP3</small>
+<div id="tp3" class="value">—</div>
+</div>
+
+<div class="box">
+<small>Confidence</small>
+<div id="confidence" class="value">0%</div>
+</div>
+
+<div class="box">
+<small>H1 Trend</small>
+<div id="h1" class="value">—</div>
+</div>
+
+<div class="box">
+<small>M15 Structure</small>
+<div id="m15" class="value">—</div>
+</div>
+
+</div>
+
+<div class="card" style="margin-top:15px">
+
+<strong>V3 Background Scanner</strong>
+
+<p class="note">
+Sharp Entry V3 runs from Railway and analyzes XAU/USD.
+When Web Push is fully connected, qualified BUY and SELL
+signals can notify your iPhone even when this page is closed.
+</p>
+
+</div>
+
+</div>
+
+<script>
+
+let swRegistration = null;
+
+async function registerServiceWorker(){
+
+ if(!("serviceWorker" in navigator)){
+  console.log("Service workers not supported");
+  return;
+ }
+
+ try{
+
+  swRegistration =
+   await navigator.serviceWorker.register("/sw.js");
+
+  console.log("Sharp Entry service worker ready");
+
+ }catch(error){
+
+  console.log(
+   "Service worker error:",
+   error
+  );
+
+ }
+
+}
+
+async function checkServer(){
+
+ try{
+
+  const response =
+   await fetch("/health");
+
+  if(!response.ok)
+   throw new Error();
+
+  const data =
+   await response.json();
+
+  document.getElementById(
+   "serverStatus"
+  ).innerText =
+   "● ONLINE";
+
+ }catch(error){
+
+  document.getElementById(
+   "serverStatus"
+  ).innerText =
+   "● OFFLINE";
+
+ }
+
+}
+
+async function scanMarket(){
+
+ const status =
+  document.getElementById("status");
+
+ status.innerText =
+  "Analyzing XAU/USD...";
+
+ try{
+
+  const response =
+   await fetch("/api/scan");
+
+  if(!response.ok)
+   throw new Error();
+
+  const d =
+   await response.json();
+
+  document.getElementById("signal")
+   .innerText =
+   d.signal || "WAIT";
+
+  document.getElementById("status")
+   .innerText =
+   d.message ||
+   "Analysis complete";
+
+  document.getElementById("entry")
+   .innerText =
+   d.entry ?? "—";
+
+  document.getElementById("sl")
+   .innerText =
+   d.sl ?? "—";
+
+  document.getElementById("tp1")
+   .innerText =
+   d.tp1 ?? "—";
+
+  document.getElementById("tp2")
+   .innerText =
+   d.tp2 ?? "—";
+
+  document.getElementById("tp3")
+   .innerText =
+   d.tp3 ?? "—";
+
+  document.getElementById(
+   "confidence"
+  ).innerText =
+   (d.confidence ?? 0) + "%";
+
+  document.getElementById("h1")
+   .innerText =
+   d.h1 || "—";
+
+  document.getElementById("m15")
+   .innerText =
+   d.m15 || "—";
+
+ }catch(error){
+
+  status.innerText =
+   "Scanner endpoint is being connected.";
+
+ }
+
+}
+
+async function enableNotifications(){
+
+ if(!("Notification" in window)){
+
+  alert(
+   "Notifications are not supported on this device."
+  );
+
+  return;
+
+ }
+
+ if(!swRegistration){
+
+  await registerServiceWorker();
+
+ }
+
+ const permission =
+  await Notification.requestPermission();
+
+ if(permission !== "granted"){
+
+  alert(
+   "Notification permission was not granted."
+  );
+
+  return;
+
+ }
+
+ try{
+
+  const response =
+   await fetch("/api/vapid-public-key");
+
+  if(!response.ok)
+   throw new Error();
+
+  const data =
+   await response.json();
+
+  const applicationServerKey =
+   urlBase64ToUint8Array(
+    data.publicKey
+   );
+
+  const subscription =
+   await swRegistration.pushManager.subscribe({
+    userVisibleOnly:true,
+    applicationServerKey
+   });
+
+  const saveResponse =
+   await fetch("/api/subscribe",{
+    method:"POST",
+    headers:{
+     "Content-Type":
+     "application/json"
+    },
+    body:JSON.stringify(
+     subscription
+    )
+   });
+
+  if(!saveResponse.ok)
+   throw new Error();
+
+  alert(
+   "Sharp Entry notifications enabled ✅"
+  );
+
+ }catch(error){
+
+  alert(
+   "Push notification server is not connected yet."
+  );
+
+ }
+
+}
+
+async function testNotification(){
+
+ if(Notification.permission
+    !== "granted"){
+
+  alert(
+   "Enable notifications first."
+  );
+
+  return;
+
+ }
+
+ try{
+
+  const response =
+   await fetch(
+    "/api/test-notification",
+    {
+     method:"POST"
+    }
+   );
+
+  if(!response.ok)
+   throw new Error();
+
+  alert(
+   "Test notification requested ✅"
+  );
+
+ }catch(error){
+
+  alert(
+   "Test notification server is not connected yet."
+  );
+
+ }
+
+}
+
+function urlBase64ToUint8Array(
+ base64String
+){
+
+ const padding =
+  "=".repeat(
+   (4-base64String.length%4)%4
+  );
+
+ const base64 =
+  (
+   base64String +
+   padding
+  )
+  .replace(/-/g,"+")
+  .replace(/_/g,"/");
+
+ const rawData =
+  window.atob(base64);
+
+ return Uint8Array.from(
+  [...rawData]
+   .map(
+    char =>
+    char.charCodeAt(0)
+   )
+ );
+
+}
+
+registerServiceWorker();
+checkServer();
+
+</script>
+
+</body>
+</html>
