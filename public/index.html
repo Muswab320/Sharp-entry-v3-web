@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="theme-color"
+    content="#07101f"
+  >
+
+  <meta
+    name="apple-mobile-web-app-capable"
+    content="yes"
+  >
+
+  <meta
+    name="apple-mobile-web-app-status-bar-style"
+    content="black-translucent"
+  >
+
+  <meta
+    name="apple-mobile-web-app-title"
+    content="Sharp Entry"
+  >
+
+  <title>ICT Sharp Entry V3</title>
+
+  <link
+    rel="manifest"
+    href="/manifest.json"
+  >
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #07101f;
+      color: #ffffff;
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 600px;
+      margin: auto;
+      padding: 18px;
+    }
+
+    .top {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .logo {
+      font-size: 27px;
+      font-weight: 800;
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      color: #8ea0b8;
+      font-size: 14px;
+    }
+
+    .online {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 7px 13px;
+      border-radius: 20px;
+      background: #0d2c24;
+      color: #34e69a;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .card {
+      background: #0c1728;
+      border: 1px solid #1b2b42;
+      border-radius: 18px;
+      padding: 18px;
+      margin-bottom: 15px;
+    }
+
+    .card-title {
+      color: #8ea0b8;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 9px;
+    }
+
+    .price {
+      font-size: 37px;
+      font-weight: 800;
+    }
+
+    .symbol {
+      color: #8ea0b8;
+      margin-top: 5px;
+    }
+
+    .timeframes {
+      display: grid;
+      grid-template-columns:
+        repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .tf {
+      background: #101e31;
+      border: 1px solid #20324b;
+      border-radius: 12px;
+      padding: 11px 5px;
+      text-align: center;
+      min-width: 0;
+    }
+
+    .tf-name {
+      font-size: 12px;
+      color: #8799b2;
+      margin-bottom: 7px;
+    }
+
+    .tf-value {
+      font-size: 12px;
+      font-weight: 800;
+      word-break: break-word;
+    }
+
+    .bullish {
+      color: #34e69a;
+    }
+
+    .bearish {
+      color: #ff5d73;
+    }
+
+    .neutral {
+      color: #ffc857;
+    }
+
+    .signal {
+      font-size: 45px;
+      font-weight: 900;
+      margin: 5px 0;
+    }
+
+    .buy {
+      color: #34e69a;
+    }
+
+    .sell {
+      color: #ff5d73;
+    }
+
+    .wait {
+      color: #ffc857;
+    }
+
+    .confidence-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+      color: #9cafc6;
+    }
+
+    .confidence-number {
+      color: #ffffff;
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .bar {
+      width: 100%;
+      height: 8px;
+      background: #16253a;
+      border-radius: 10px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      width: 0%;
+      background: #34e69a;
+      border-radius: 10px;
+      transition: width 0.3s;
+    }
+
+    .levels {
+      display: grid;
+      grid-template-columns:
+        repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .level {
+      background: #101e31;
+      border: 1px solid #20324b;
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .level-label {
+      color: #8194ad;
+      font-size: 11px;
+      margin-bottom: 5px;
+    }
+
+    .level-value {
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .entry-value {
+      color: #ffffff;
+    }
+
+    .sl-value {
+      color: #ff5d73;
+    }
+
+    .tp-value {
+      color: #34e69a;
+    }
+
+    .reason {
+      margin-top: 16px;
+      padding: 13px;
+      border-radius: 12px;
+      background: #101e31;
+      color: #b8c5d6;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    button {
+      width: 100%;
+      min-height: 50px;
+      border: 0;
+      border-radius: 12px;
+      margin-top: 10px;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    #scanButton {
+      background: #ffffff;
+      color: #07101f;
+    }
+
+    #notificationButton {
+      background: #2563eb;
+      color: #ffffff;
+    }
+
+    #testNotificationButton {
+      background: #15253a;
+      color: #ffffff;
+      border: 1px solid #29405e;
+    }
+
+    .scanner-status {
+      margin-top: 14px;
+      text-align: center;
+      color: #8ea0b8;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .history-item {
+      background: #101e31;
+      border: 1px solid #1d3048;
+      border-radius: 13px;
+      padding: 13px;
+      margin-top: 10px;
+    }
+
+    .history-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .history-type {
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .history-confidence {
+      color: #9cafc6;
+      font-size: 13px;
+    }
+
+    .history-levels {
+      margin-top: 8px;
+      color: #c4cfdd;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .history-reason {
+      color: #8295ae;
+      font-size: 11px;
+      margin-top: 7px;
+      line-height: 1.5;
+    }
+
+    .history-time {
+      color: #667991;
+      font-size: 11px;
+      margin-top: 7px;
+    }
+
+    .empty {
+      color: #71849d;
+      padding: 12px 0;
+    }
+
+    @media (
+      max-width: 390px
+    ) {
+
+      .timeframes {
+        grid-template-columns:
+          repeat(2, 1fr);
+      }
+
+      .signal {
+        font-size: 40px;
+      }
+
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <div class="top">
+
+    <div class="logo">
+      🔥 ICT Sharp Entry V3
+    </div>
+
+    <div class="subtitle">
+      XAU/USD Multi-Timeframe Scanner
+    </div>
+
+    <div
+      class="online"
+      id="onlineStatus"
+    >
+      Connecting...
+    </div>
+
+  </div>
+
+
+  <!-- PRICE -->
+
+  <div class="card">
+
+    <div class="card-title">
+      GOLD PRICE
+    </div>
+
+    <div
+      class="price"
+      id="price"
+    >
+      --
+    </div>
+
+    <div class="symbol">
+      XAU/USD • M5 Entry
+    </div>
+
+  </div>
+
+
+  <!-- TIMEFRAMES -->
+
+  <div class="card">
+
+    <div class="card-title">
+      ICT MULTI-TIMEFRAME ANALYSIS
+    </div>
+
+    <div class="timeframes">
+
+      <div class="tf">
+
+        <div class="tf-name">
+          H1 BIAS
+        </div>
+
+        <div
+          class="tf-value neutral"
+          id="h1Bias"
+        >
+          WAIT
+        </div>
+
+      </div>
+
+
+      <div class="tf">
+
+        <div class="tf-name">
+          M30 BIAS
+        </div>
+
+        <div
+          class="tf-value neutral"
+          id="m30Bias"
+        >
+          WAIT
+        </div>
+
+      </div>
+
+
+      <div class="tf">
+
+        <div class="tf-name">
+          M15 SETUP
+        </div>
+
+        <div
+          class="tf-value neutral"
+          id="m15Setup"
+        >
+          WAIT
+        </div>
+
+      </div>
+
+
+      <div class="tf">
+
+        <div class="tf-name">
+          M5 ENTRY
+        </div>
+
+        <div
+          class="tf-value neutral"
+          id="m5Entry"
+        >
+          WAIT
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- SIGNAL -->
+
+  <div class="card">
+
+    <div class="card-title">
+      CURRENT ICT SHARP ENTRY
+    </div>
+
+    <div
+      id="signal"
+      class="signal wait"
+    >
+      WAIT
+    </div>
+
+
+    <div class="confidence-row">
+
+      <span>
+        Setup Confidence
+      </span>
+
+      <span
+        class="confidence-number"
+        id="confidence"
+      >
+        0%
+      </span>
+
+    </div>
+
+
+    <div class="bar">
+
+      <div
+        class="bar-fill"
+        id="confidenceBar"
+      ></div>
+
+    </div>
+
+
+    <!-- ENTRY / SL / TPS -->
+
+    <div class="levels">
+
+      <div class="level">
+
+        <div class="level-label">
+          ENTRY
+        </div>
+
+        <div
+          class="level-value entry-value"
+          id="entry"
+        >
+          --
+        </div>
+
+      </div>
+
+
+      <div class="level">
+
+        <div class="level-label">
+          STOP LOSS
+        </div>
+
+        <div
+          class="level-value sl-value"
+          id="sl"
+        >
+          --
+        </div>
+
+      </div>
+
+
+      <div class="level">
+
+        <div class="level-label">
+          TP1
+        </div>
+
+        <div
+          class="level-value tp-value"
+          id="tp1"
+        >
+          --
+        </div>
+
+      </div>
+
+
+      <div class="level">
+
+        <div class="level-label">
+          TP2
+        </div>
+
+        <div
+          class="level-value tp-value"
+          id="tp2"
+        >
+          --
+        </div>
+
+      </div>
+
+
+      <div class="level">
+
+        <div class="level-label">
+          TP3
+        </div>
+
+        <div
+          class="level-value tp-value"
+          id="tp3"
+        >
+          --
+        </div>
+
+      </div>
+
+
+      <div class="level">
+
+        <div class="level-label">
+          ENTRY TIMEFRAME
+        </div>
+
+        <div class="level-value">
+          M5
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div
+      class="reason"
+      id="reason"
+    >
+      Waiting for ICT confirmation
+    </div>
+
+  </div>
+
+
+  <!-- CONTROLS -->
+
+  <div class="card">
+
+    <div class="card-title">
+      ICT SCANNER
+    </div>
+
+    <button id="scanButton">
+      Scan Gold Now
+    </button>
+
+    <button id="notificationButton">
+      🔔 Enable Notifications
+    </button>
+
+    <button id="testNotificationButton">
+      Test Notification
+    </button>
+
+
+    <div class="scanner-status">
+
+      <div id="status">
+        Connecting to server...
+      </div>
+
+      <div>
+        Last scan:
+        <span id="lastScan">
+          --
+        </span>
+      </div>
+
+      <div>
+        Auto scan: Every 5 minutes
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- HISTORY -->
+
+  <div class="card">
+
+    <div class="card-title">
+      RECENT ICT SIGNALS
+    </div>
+
+    <div id="history">
+      Loading...
+    </div>
+
+  </div>
+
+</div>
+
+
+<script src="/app.js?v=5"></script>
+
+</body>
+
+</html>
