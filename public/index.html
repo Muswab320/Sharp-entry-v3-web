@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="theme-color"
+    content="#090909"
+  >
+
+  <meta
+    name="apple-mobile-web-app-capable"
+    content="yes"
+  >
+
+  <meta
+    name="apple-mobile-web-app-status-bar-style"
+    content="black"
+  >
+
+  <title>Sharp Entry V3</title>
+
+  <link
+    rel="manifest"
+    href="/manifest.json"
+  >
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      background: #090909;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .card {
+      background: #171717;
+      border: 1px solid #333;
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 18px;
+    }
+
+    .label {
+      color: #999;
+      font-size: 14px;
+    }
+
+    #price {
+      font-size: 40px;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .signal {
+      font-size: 42px;
+      font-weight: bold;
+      margin: 15px 0;
+    }
+
+    .buy {
+      color: #20d67b;
+    }
+
+    .sell {
+      color: #ff5252;
+    }
+
+    .wait {
+      color: #ffc107;
+    }
+
+    button {
+      width: 100%;
+      padding: 16px;
+      margin-top: 12px;
+      border: none;
+      border-radius: 13px;
+      font-size: 17px;
+      font-weight: bold;
+    }
+
+    #scanButton {
+      background: white;
+      color: black;
+    }
+
+    #notificationButton {
+      background: #2874f0;
+      color: white;
+    }
+
+    #testNotificationButton {
+      background: #333;
+      color: white;
+    }
+
+    #status {
+      text-align: center;
+      margin-top: 18px;
+      color: #aaa;
+    }
+
+    #lastScan {
+      color: #aaa;
+    }
+
+    .history-item {
+      background: #101010;
+      padding: 13px;
+      border-radius: 12px;
+      margin-top: 10px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h1>
+      🔥 Sharp Entry V3
+    </h1>
+
+    <div class="card">
+
+      <div class="label">
+        XAU/USD PRICE
+      </div>
+
+      <div id="price">
+        --
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <div class="label">
+        CURRENT SIGNAL
+      </div>
+
+      <div
+        id="signal"
+        class="signal wait"
+      >
+        WAIT
+      </div>
+
+      <h2>
+        Confidence:
+        <span id="confidence">
+          0%
+        </span>
+      </h2>
+
+      <p id="reason">
+        Waiting for Sharp Entry confirmation
+      </p>
+
+    </div>
+
+    <div class="card">
+
+      <button id="scanButton">
+        Scan Market
+      </button>
+
+      <button id="notificationButton">
+        Enable Notifications
+      </button>
+
+      <button id="testNotificationButton">
+        Test Notification
+      </button>
+
+      <div id="status">
+        Connecting...
+      </div>
+
+      <p style="text-align:center;">
+        Last scan:
+        <span id="lastScan">--</span>
+      </p>
+
+    </div>
+
+    <div class="card">
+
+      <h2>
+        Signal History
+      </h2>
+
+      <div id="history">
+        Loading...
+      </div>
+
+    </div>
+
+  </div>
+
+  <script src="/app.js?v=2"></script>
+
+</body>
+
+</html>
