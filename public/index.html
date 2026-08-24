@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="theme-color"
+    content="#111111"
+  >
+
+  <title>
+    Sharp Entry V3
+  </title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      background: #0c0c0c;
+      color: white;
+      font-family:
+        Arial,
+        sans-serif;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #999;
+      margin-bottom: 25px;
+    }
+
+    .card {
+      background: #171717;
+      border: 1px solid #292929;
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 15px;
+    }
+
+    .label {
+      color: #999;
+      font-size: 14px;
+    }
+
+    .price {
+      font-size: 38px;
+      font-weight: bold;
+      margin-top: 5px;
+    }
+
+    .signal {
+      font-size: 36px;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    .buy {
+      color: #20d67b;
+    }
+
+    .sell {
+      color: #ff5252;
+    }
+
+    .wait {
+      color: #ffc107;
+    }
+
+    .confidence {
+      font-size: 20px;
+      margin-top: 10px;
+    }
+
+    .reason {
+      margin-top: 10px;
+      color: #ccc;
+      line-height: 1.5;
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #scanButton {
+      background: white;
+      color: black;
+    }
+
+    #notificationButton {
+      background: #276ef1;
+      color: white;
+    }
+
+    #testNotificationButton {
+      background: #333;
+      color: white;
+    }
+
+    .status {
+      text-align: center;
+      color: #aaa;
+      margin-top: 15px;
+    }
+
+    .history-item {
+      background: #111;
+      border-radius: 12px;
+      padding: 13px;
+      margin-top: 10px;
+      line-height: 1.6;
+    }
+
+    .history-item small {
+      color: #777;
+    }
+
+    .history-empty {
+      color: #777;
+      padding-top: 15px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h1>
+      🔥 Sharp Entry V3
+    </h1>
+
+    <div class="subtitle">
+      Gold XAU/USD Scanner
+    </div>
+
+    <div class="card">
+
+      <div class="label">
+        XAU/USD PRICE
+      </div>
+
+      <div
+        class="price"
+        id="price"
+      >
+        --
+      </div>
+
+    </div>
+
+
+    <div class="card">
+
+      <div class="label">
+        CURRENT SIGNAL
+      </div>
+
+      <div
+        id="signal"
+        class="signal wait"
+      >
+        WAIT
+      </div>
+
+      <div class="confidence">
+        Confidence:
+        <strong
+          id="confidence"
+        >
+          0%
+        </strong>
+      </div>
+
+      <div
+        class="reason"
+        id="reason"
+      >
+        Waiting for market scan
+      </div>
+
+    </div>
+
+
+    <div class="card">
+
+      <button id="scanButton">
+        Scan Market
+      </button>
+
+      <button
+        id="notificationButton"
+      >
+        Enable Notifications
+      </button>
+
+      <button
+        id="testNotificationButton"
+      >
+        Test Notification
+      </button>
+
+      <div class="status">
+        <div id="status">
+          Connecting...
+        </div>
+
+        <br>
+
+        Last scan:
+
+        <span id="lastScan">
+          --
+        </span>
+      </div>
+
+    </div>
+
+
+    <div class="card">
+
+      <h2>
+        Signal History
+      </h2>
+
+      <div id="history">
+        Loading...
+      </div>
+
+    </div>
+
+  </div>
+
+  <script src="/app.js"></script>
+
+</body>
+
+</html>
