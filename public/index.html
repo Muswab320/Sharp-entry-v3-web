@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width,initial-scale=1,viewport-fit=cover">
+
+<meta name="theme-color" content="#07111f">
+
+<title>Sharp Entry V3</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #07111f;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  max-width: 650px;
+  margin: auto;
+  padding: 20px 15px 50px;
+}
+
+h1 {
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  color: #91a4b8;
+  margin-bottom: 20px;
+}
+
+.card {
+  background: #0d1b2b;
+  border: 1px solid #21364d;
+  border-radius: 16px;
+  padding: 17px;
+  margin-bottom: 14px;
+}
+
+.server {
+  font-weight: bold;
+}
+
+.online {
+  color: #27d796;
+}
+
+.offline {
+  color: #ff5c5c;
+}
+
+.signal {
+  text-align: center;
+  font-size: 42px;
+  font-weight: bold;
+  margin: 12px 0;
+  color: #ffd43b;
+}
+
+.confidence {
+  text-align: center;
+  color: #9db0c4;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.box {
+  background: #081522;
+  border: 1px solid #1c3045;
+  border-radius: 12px;
+  padding: 13px;
+}
+
+.label {
+  color: #8298ae;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.value {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+button {
+  width: 100%;
+  border: 0;
+  border-radius: 11px;
+  padding: 15px;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.scan {
+  background: #ffd43b;
+  color: #111;
+}
+
+.notify {
+  background: #20c98c;
+  color: #02140d;
+}
+
+.test {
+  background: #2b76e5;
+  color: white;
+}
+
+.refresh {
+  background: #26394d;
+  color: white;
+}
+
+.history-item {
+  background: #081522;
+  border-radius: 10px;
+  padding: 12px;
+  margin-top: 9px;
+}
+
+.history-buy {
+  color: #28d796;
+  font-weight: bold;
+}
+
+.history-sell {
+  color: #ff6868;
+  font-weight: bold;
+}
+
+.small {
+  color: #8298ae;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+#message {
+  text-align: center;
+  color: #91a4b8;
+  margin-top: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🔥 Gold Sharp Entry V3</h1>
+
+<div class="subtitle">
+XAU/USD Sharp Entry Scanner
+</div>
+
+<div class="card">
+
+<div class="server">
+Server:
+<span id="serverStatus">
+Checking...
+</span>
+</div>
+
+<div class="small" id="lastScan">
+Last scan: —
+</div>
+
+<div class="small" id="nextScan">
+Next scan: —
+</div>
+
+<button
+class="scan"
+onclick="scanNow()">
+⚡ Scan Gold Now
+</button>
+
+<button
+class="notify"
+onclick="enableNotifications()">
+🔔 Enable Notifications
+</button>
+
+<button
+class="test"
+onclick="testNotification()">
+🔔 Send Test Notification
+</button>
+
+</div>
+
+
+<div class="card">
+
+<div class="small">
+CURRENT SIGNAL
+</div>
+
+<div
+id="signal"
+class="signal">
+WAIT
+</div>
+
+<div
+id="confidence"
+class="confidence">
+Confidence: 0%
+</div>
+
+<div id="message">
+Waiting for scanner...
+</div>
+
+</div>
+
+
+<div class="grid">
+
+<div class="box">
+<div class="label">
+Gold Price
+</div>
+<div
+id="price"
+class="value">
+—
+</div>
+</div>
+
+
+<div class="box">
+<div class="label">
+Entry
+</div>
+<div
+id="entry"
+class="value">
+—
+</div>
+</div>
+
+
+<div class="box">
+<div class="label">
+Stop Loss
+</div>
+<div
+id="sl"
+class="value">
+—
+</div>
+</div>
+
+
+<div class="box">
+<div class="label">
+TP1
+</div>
+<div
+id="tp1"
+class="value">
+—
+</div>
+</div>
+
+
+<div class="box">
+<div class="label">
+TP2
+</div>
+<div
+id="tp2"
+class="value">
+—
+</div>
+</div>
+
+
+<div class="box">
+<div class="label">
+TP3
+</div>
+<div
+id="tp3"
+class="value">
+—
+</div>
+</div>
+
+
+<div class="box">
+<div class="label">
+Buy Score
+</div>
+<div
+id="buyScore"
+class="value">
+0%
+</div>
+</div>
+
+
+<div class="box">
+<div class="label">
+Sell Score
+</div>
+<div
+id="sellScore"
+class="value">
+0%
+</div>
+</div>
+
+
+<div class="box">
+<div class="label">
+H1 Trend
+</div>
+<div
+id="h1"
+class="value">
+—
+</div>
+</div>
+
+
+<div class="box">
+<div class="label">
+M15 Confirmation
+</div>
+<div
+id="m15"
+class="value">
+—
+</div>
+</div>
+
+
+<div class="box">
+<div class="label">
+M5 Trigger
+</div>
+<div
+id="m5"
+class="value">
+—
+</div>
+</div>
+
+
+<div class="box">
+<div class="label">
+RSI
+</div>
+<div
+id="rsi"
+class="value">
+—
+</div>
+</div>
+
+</div>
+
+
+<div class="card"
+style="margin-top:14px">
+
+<h3>
+📜 Signal History
+</h3>
+
+<button
+class="refresh"
+onclick="loadHistory()">
+Refresh History
+</button>
+
+<div id="history">
+No signals saved yet.
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* ==========================
+   STATUS
+========================== */
+
+async function loadStatus() {
+
+  try {
+
+    const response =
+      await fetch(
+        "/api/status"
+      );
+
+    const data =
+      await response.json();
+
+    document.getElementById(
+      "serverStatus"
+    ).innerHTML =
+      '<span class="online">● ONLINE</span>';
+
+    const s =
+      data.signal || {};
+
+    document.getElementById(
+      "signal"
+    ).textContent =
+      s.type || "WAIT";
+
+    document.getElementById(
+      "confidence"
+    ).textContent =
+      "Confidence: " +
+      (s.confidence || 0) +
+      "%";
+
+    document.getElementById(
+      "price"
+    ).textContent =
+      data.market?.price ??
+      "—";
+
+    document.getElementById(
+      "entry"
+    ).textContent =
+      s.entry ?? "—";
+
+    document.getElementById(
+      "sl"
+    ).textContent =
+      s.stopLoss ?? "—";
+
+    document.getElementById(
+      "tp1"
+    ).textContent =
+      s.tp1 ?? "—";
+
+    document.getElementById(
+      "tp2"
+    ).textContent =
+      s.tp2 ?? "—";
+
+    document.getElementById(
+      "tp3"
+    ).textContent =
+      s.tp3 ?? "—";
+
+    document.getElementById(
+      "buyScore"
+    ).textContent =
+      (s.buyScore || 0) +
+      "%";
+
+    document.getElementById(
+      "sellScore"
+    ).textContent =
+      (s.sellScore || 0) +
+      "%";
+
+    document.getElementById(
+      "h1"
+    ).textContent =
+      s.h1Trend || "—";
+
+    document.getElementById(
+      "m15"
+    ).textContent =
+      s.m15Trend || "—";
+
+    document.getElementById(
+      "m5"
+    ).textContent =
+      s.m5Trigger || "—";
+
+    document.getElementById(
+      "rsi"
+    ).textContent =
+      s.rsi ?? "—";
+
+    document.getElementById(
+      "message"
+    ).textContent =
+      s.reason ||
+      "Waiting for setup";
+
+    document.getElementById(
+      "lastScan"
+    ).textContent =
+      "Last scan: " +
+      formatDate(
+        data.lastScanAt
+      );
+
+    document.getElementById(
+      "nextScan"
+    ).textContent =
+      "Next scan: " +
+      formatDate(
+        data.nextScanAt
+      );
+
+  } catch (error) {
+
+    document.getElementById(
+      "serverStatus"
+    ).innerHTML =
+      '<span class="offline">● OFFLINE</span>';
+
+  }
+
+}
+
+
+/* ==========================
+   SCAN NOW
+========================== */
+
+async function scanNow() {
+
+  const button =
+    event.currentTarget;
+
+  button.disabled = true;
+
+  button.textContent =
+    "Analyzing Gold...";
+
+  try {
+
+    await fetch(
+      "/api/scan",
+      {
+        method: "POST"
+      }
+    );
+
+    await loadStatus();
+
+    await loadHistory();
+
+  } catch (error) {
+
+    alert(
+      "Scanner could not connect."
+    );
+
+  }
+
+  button.disabled = false;
+
+  button.textContent =
+    "⚡ Scan Gold Now";
+
+}
+
+
+/* ==========================
+   NOTIFICATIONS
+========================== */
+
+function urlBase64ToUint8Array(
+  base64String
+) {
+
+  const padding =
+    "=".repeat(
+      (4 -
+        base64String.length %
+          4) %
+        4
+    );
+
+  const base64 =
+    (
+      base64String +
+      padding
+    )
+      .replace(/-/g, "+")
+      .replace(/_/g, "/");
+
+  const rawData =
+    window.atob(base64);
+
+  return Uint8Array.from(
+    [...rawData].map(
+      char =>
+        char.charCodeAt(0)
+    )
+  );
+
+}
+
+
+async function enableNotifications() {
+
+  try {
+
+    if (
+      !(
+        "serviceWorker"
+        in navigator
+      )
+    ) {
+
+      alert(
+        "Service workers are not supported."
+      );
+
+      return;
+    }
+
+    const permission =
+      await Notification
+        .requestPermission();
+
+    if (
+      permission !==
+      "granted"
+    ) {
+
+      alert(
+        "Notification permission was not granted."
+      );
+
+      return;
+    }
+
+    const registration =
+      await navigator
+        .serviceWorker
+        .register(
+          "/service-worker.js"
+        );
+
+    const keyResponse =
+      await fetch(
+        "/api/vapid-public-key"
+      );
+
+    const keyData =
+      await keyResponse
+        .json();
+
+    if (
+      !keyData.publicKey
+    ) {
+
+      alert(
+        "Notifications are not configured on Railway yet."
+      );
+
+      return;
+    }
+
+    let subscription =
+      await registration
+        .pushManager
+        .getSubscription();
+
+    if (!subscription) {
+
+      subscription =
+        await registration
+          .pushManager
+          .subscribe({
+
+            userVisibleOnly:
+              true,
+
+            applicationServerKey:
+              urlBase64ToUint8Array(
+                keyData.publicKey
+              )
+
+          });
+
+    }
+
+    await fetch(
+      "/api/subscribe",
+      {
+
+        method: "POST",
+
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
+
+        body:
+          JSON.stringify(
+            subscription
+          )
+
+      }
+    );
+
+    alert(
+      "Sharp Entry notifications enabled."
+    );
+
+  } catch (error) {
+
+    alert(
+      "Notification setup failed: " +
+      error.message
+    );
+
+  }
+
+}
+
+
+/* ==========================
+   TEST NOTIFICATION
+========================== */
+
+async function testNotification() {
+
+  try {
+
+    const response =
+      await fetch(
+        "/api/test-notification",
+        {
+          method: "POST"
+        }
+      );
+
+    const data =
+      await response.json();
+
+    if (data.success) {
+
+      alert(
+        "Test notification sent."
+      );
+
+    } else {
+
+      alert(
+        data.error ||
+        "Notification failed."
+      );
+
+    }
+
+  } catch (error) {
+
+    alert(
+      "Could not send notification."
+    );
+
+  }
+
+}
+
+
+/* ==========================
+   HISTORY
+========================== */
+
+async function loadHistory() {
+
+  try {
+
+    const response =
+      await fetch(
+        "/api/history"
+      );
+
+    const history =
+      await response.json();
+
+    const box =
+      document.getElementById(
+        "history"
+      );
+
+    if (
+      !Array.isArray(history) ||
+      history.length === 0
+    ) {
+
+      box.innerHTML =
+        '<div class="small">No BUY/SELL signals saved yet.</div>';
+
+      return;
+    }
+
+    box.innerHTML =
+      history
+        .slice(0, 30)
+        .map(
+          signal => {
+
+            const css =
+              signal.type ===
+              "BUY"
+                ?
+                "history-buy"
+                :
+                "history-sell";
+
+            return `
+              <div class="history-item">
+
+                <div class="${css}">
+                  ${signal.type}
+                  •
+                  ${signal.confidence}%
+                </div>
+
+                <div class="small">
+                  Entry:
+                  ${signal.entry}
+                  <br>
+
+                  SL:
+                  ${signal.stopLoss}
+                  <br>
+
+                  TP1:
+                  ${signal.tp1}
+                  •
+                  TP2:
+                  ${signal.tp2}
+                  •
+                  TP3:
+                  ${signal.tp3}
+                  <br>
+
+                  ${formatDate(
+                    signal.createdAt
+                  )}
+                </div>
+
+              </div>
+            `;
+
+          }
+        )
+        .join("");
+
+  } catch (error) {
+
+    document.getElementById(
+      "history"
+    ).textContent =
+      "History unavailable.";
+
+  }
+
+}
+
+
+/* ==========================
+   DATE
+========================== */
+
+function formatDate(value) {
+
+  if (!value) {
+    return "—";
+  }
+
+  try {
+
+    return new Date(
+      value
+    ).toLocaleString();
+
+  } catch {
+
+    return value;
+
+  }
+
+}
+
+
+/* ==========================
+   START PAGE
+========================== */
+
+loadStatus();
+
+loadHistory();
+
+/*
+  Refresh the display every
+  30 seconds.
+
+  This does NOT control the
+  background scanner.
+
+  Railway/server.js does that.
+*/
+
+setInterval(
+  loadStatus,
+  30000
+);
+
+</script>
+
+</body>
+</html>
