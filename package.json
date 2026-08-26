@@ -1,0 +1,16 @@
+{
+  "name": "sharp-entry-v3",
+  "version": "3.0.0",
+  "description": "Gold Sharp Entry XAUUSD Signal Scanner",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "web-push": "^3.6.7"
+  }
+}
