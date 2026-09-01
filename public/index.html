@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <meta
+    name="theme-color"
+    content="#07111f"
+  />
+
+  <title>
+    Gold Sharp Entry V3
+  </title>
+
+  <link
+    rel="manifest"
+    href="/manifest.json"
+  />
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+      background:
+        #06111f;
+
+      color: white;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #8fa5bd;
+      margin-bottom: 25px;
+    }
+
+    .status-box {
+      background: #0b1b2b;
+      border: 1px solid #1f3a52;
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .status-line {
+      margin: 8px 0;
+      color: #a9bdd0;
+    }
+
+    .online {
+      color: #3ddc84;
+      font-weight: bold;
+    }
+
+    .offline {
+      color: #ff5252;
+      font-weight: bold;
+    }
+
+    button {
+      width: 100%;
+      padding: 16px;
+      margin-top: 12px;
+      border: 0;
+      border-radius: 14px;
+
+      font-size: 16px;
+      font-weight: bold;
+
+      background: #29415a;
+      color: white;
+
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+    }
+
+    .signal-box {
+      text-align: center;
+
+      background: #0b1b2b;
+      border: 1px solid #1f3a52;
+      border-radius: 18px;
+
+      padding: 25px;
+      margin-bottom: 20px;
+    }
+
+    #signalType {
+      font-size: 38px;
+      font-weight: bold;
+    }
+
+    #confidence {
+      font-size: 22px;
+      margin-top: 8px;
+    }
+
+    #reason {
+      color: #8fa5bd;
+      margin-top: 8px;
+    }
+
+    .grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(2, 1fr);
+
+      gap: 14px;
+    }
+
+    .card {
+      min-height: 130px;
+
+      background: #0b1b2b;
+
+      border: 1px solid #1f3a52;
+
+      border-radius: 18px;
+
+      padding: 20px;
+    }
+
+    .label {
+      color: #8fa5bd;
+      font-size: 16px;
+      margin-bottom: 15px;
+    }
+
+    .value {
+      font-size: 22px;
+      font-weight: bold;
+      word-break: break-word;
+    }
+
+    .bullish {
+      color: #3ddc84;
+    }
+
+    .bearish {
+      color: #ff6464;
+    }
+
+    .wait {
+      color: #f5c451;
+    }
+
+    .history {
+      margin-top: 22px;
+
+      background: #0b1b2b;
+
+      border: 1px solid #1f3a52;
+
+      border-radius: 18px;
+
+      padding: 20px;
+    }
+
+    .history h2 {
+      margin-top: 0;
+    }
+
+    .history-item {
+      margin-top: 12px;
+
+      background: #10263a;
+
+      padding: 15px;
+
+      border-radius: 12px;
+    }
+
+    .small {
+      font-size: 14px;
+      color: #91a7bc;
+      margin-top: 4px;
+    }
+
+    @media (
+      max-width: 600px
+    ) {
+      .container {
+        padding: 16px;
+      }
+
+      .card {
+        min-height: 120px;
+      }
+
+      .value {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>
+    🔥 Gold Sharp Entry V3
+  </h1>
+
+  <div class="subtitle">
+    XAU/USD Sharp Entry Scanner
+  </div>
+
+
+  <div class="status-box">
+
+    <div class="status-line">
+      Server:
+      <span id="serverStatus">
+        Checking...
+      </span>
+    </div>
+
+    <div class="status-line">
+      Last Scan:
+      <span id="lastScan">
+        —
+      </span>
+    </div>
+
+    <div class="status-line">
+      Next Scan:
+      <span id="nextScan">
+        —
+      </span>
+    </div>
+
+    <button
+      id="scanButton"
+      onclick="scanNow()"
+    >
+      ⚡ Scan Gold Now
+    </button>
+
+    <button
+      onclick="enableNotifications()"
+    >
+      🔔 Enable Notifications
+    </button>
+
+    <button
+      onclick="testNotification()"
+    >
+      🔔 Send Test Notification
+    </button>
+
+  </div>
+
+
+  <div class="signal-box">
+
+    <div id="signalType">
+      WAIT
+    </div>
+
+    <div id="confidence">
+      0%
+    </div>
+
+    <div id="reason">
+      Waiting for market scan
+    </div>
+
+  </div>
+
+
+  <div class="grid">
+
+    <div class="card">
+      <div class="label">
+        Gold Price
+      </div>
+
+      <div
+        class="value"
+        id="price"
+      >
+        —
+      </div>
+    </div>
+
+
+    <div class="card">
+      <div class="label">
+        Entry
+      </div>
+
+      <div
+        class="value"
+        id="entry"
+      >
+        —
+      </div>
+    </div>
+
+
+    <div class="card">
+      <div class="label">
+        Stop Loss
+      </div>
+
+      <div
+        class="value"
+        id="sl"
+      >
+        —
+      </div>
+    </div>
+
+
+    <div class="card">
+      <div class="label">
+        TP1
+      </div>
+
+      <div
+        class="value"
+        id="tp1"
+      >
+        —
+      </div>
+    </div>
+
+
+    <div class="card">
+      <div class="label">
+        TP2
+      </div>
+
+      <div
+        class="value"
+        id="tp2"
+      >
+        —
+      </div>
+    </div>
+
+
+    <div class="card">
+      <div class="label">
+        TP3
+      </div>
+
+      <div
+        class="value"
+        id="tp3"
+      >
+        —
+      </div>
+    </div>
+
+
+    <div class="card">
+      <div class="label">
+        Buy Score
+      </div>
+
+      <div
+        class="value"
+        id="buyScore"
+      >
+        0%
+      </div>
+    </div>
+
+
+    <div class="card">
+      <div class="label">
+        Sell Score
+      </div>
+
+      <div
+        class="value"
+        id="sellScore"
+      >
+        0%
+      </div>
+    </div>
+
+
+    <div class="card">
+      <div class="label">
+        H1 Trend
+      </div>
+
+      <div
+        class="value"
+        id="h1Trend"
+      >
+        —
+      </div>
+    </div>
+
+
+    <div class="card">
+      <div class="label">
+        M15 Confirmation
+      </div>
+
+      <div
+        class="value"
+        id="m15Trend"
+      >
+        —
+      </div>
+    </div>
+
+
+    <div class="card">
+      <div class="label">
+        M5 Trigger
+      </div>
+
+      <div
+        class="value"
+        id="m5Trigger"
+      >
+        —
+      </div>
+    </div>
+
+
+    <div class="card">
+      <div class="label">
+        RSI
+      </div>
+
+      <div
+        class="value"
+        id="rsi"
+      >
+        —
+      </div>
+    </div>
+
+
+    <!-- NEW LIQUIDITY BOX -->
+
+    <div class="card">
+      <div class="label">
+        💧 Liquidity Sweep
+      </div>
+
+      <div
+        class="value"
+        id="liquiditySweep"
+      >
+        NONE
+      </div>
+    </div>
+
+
+    <!-- NEW FVG BOX -->
+
+    <div class="card">
+      <div class="label">
+        ⚡ Fair Value Gap
+      </div>
+
+      <div
+        class="value"
+        id="fvg"
+      >
+        NONE
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="history">
+
+    <h2>
+      📜 Signal History
+    </h2>
+
+    <button
+      onclick="loadHistory()"
+    >
+      Refresh History
+    </button>
+
+    <div id="historyList">
+
+      <p class="small">
+        Loading history...
+      </p>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+function displayValue(
+  value
+) {
+
+  if (
+    value === null ||
+    value === undefined ||
+    value === ""
+  ) {
+    return "—";
+  }
+
+  return value;
+}
+
+
+function setDirectionClass(
+  element,
+  value
+) {
+
+  element.classList.remove(
+    "bullish",
+    "bearish",
+    "wait"
+  );
+
+  if (
+    value === "BULLISH" ||
+    value === "BUY"
+  ) {
+
+    element.classList.add(
+      "bullish"
+    );
+
+  } else if (
+    value === "BEARISH" ||
+    value === "SELL"
+  ) {
+
+    element.classList.add(
+      "bearish"
+    );
+
+  } else {
+
+    element.classList.add(
+      "wait"
+    );
+  }
+}
+
+
+async function loadStatus() {
+
+  try {
+
+    const response =
+      await fetch(
+        "/api/status",
+        {
+          cache: "no-store"
+        }
+      );
+
+    const data =
+      await response.json();
+
+
+    const server =
+      document.getElementById(
+        "serverStatus"
+      );
+
+    server.textContent =
+      data.online
+        ? "ONLINE"
+        : "OFFLINE";
+
+    server.className =
+      data.online
+        ? "online"
+        : "offline";
+
+
+    document.getElementById(
+      "lastScan"
+    ).textContent =
+      data.lastScanAt
+        ? new Date(
+            data.lastScanAt
+          ).toLocaleString()
+        : "—";
+
+
+    document.getElementById(
+      "nextScan"
+    ).textContent =
+      data.nextScanAt
+        ? new Date(
+            data.nextScanAt
+          ).toLocaleString()
+        : "—";
+
+
+    const market =
+      data.market || {};
+
+    const signal =
+      data.signal || {};
+
+    const analysis =
+      data.analysis || {};
+
+
+    document.getElementById(
+      "price"
+    ).textContent =
+      displayValue(
+        market.price
+      );
+
+
+    document.getElementById(
+      "entry"
+    ).textContent =
+      displayValue(
+        signal.entry
+      );
+
+
+    document.getElementById(
+      "sl"
+    ).textContent =
+      displayValue(
+        signal.sl
+      );
+
+
+    document.getElementById(
+      "tp1"
+    ).textContent =
+      displayValue(
+        signal.tp1
+      );
+
+
+    document.getElementById(
+      "tp2"
+    ).textContent =
+      displayValue(
+        signal.tp2
+      );
+
+
+    document.getElementById(
+      "tp3"
+    ).textContent =
+      displayValue(
+        signal.tp3
+      );
+
+
+    const signalType =
+      document.getElementById(
+        "signalType"
+      );
+
+    signalType.textContent =
+      signal.type || "WAIT";
+
+    setDirectionClass(
+      signalType,
+      signal.type
+    );
+
+
+    document.getElementById(
+      "confidence"
+    ).textContent =
+      `${signal.confidence || 0}%`;
+
+
+    document.getElementById(
+      "reason"
+    ).textContent =
+      signal.reason ||
+      "No strong setup yet";
+
+
+    document.getElementById(
+      "buyScore"
+    ).textContent =
+      `${analysis.buyScore || 0}%`;
+
+
+    document.getElementById(
+      "sellScore"
+    ).textContent =
+      `${analysis.sellScore || 0}%`;
+
+
+    const h1 =
+      document.getElementById(
+        "h1Trend"
+      );
+
+    h1.textContent =
+      displayValue(
+        analysis.h1Trend
+      );
+
+    setDirectionClass(
+      h1,
+      analysis.h1Trend
+    );
+
+
+    const m15 =
+      document.getElementById(
+        "m15Trend"
+      );
+
+    m15.textContent =
+      displayValue(
+        analysis.m15Trend
+      );
+
+    setDirectionClass(
+      m15,
+      analysis.m15Trend
+    );
+
+
+    const m5 =
+      document.getElementById(
+        "m5Trigger"
+      );
+
+    m5.textContent =
+      displayValue(
+        analysis.m5Trigger
+      );
+
+    setDirectionClass(
+      m5,
+      analysis.m5Trigger
+    );
+
+
+    document.getElementById(
+      "rsi"
+    ).textContent =
+      analysis.rsi !== null &&
+      analysis.rsi !== undefined
+        ? analysis.rsi
+        : "—";
+
+
+    /* LIQUIDITY */
+
+    const liquidity =
+      document.getElementById(
+        "liquiditySweep"
+      );
+
+    liquidity.textContent =
+      analysis.liquiditySweep ||
+      "NONE";
+
+    setDirectionClass(
+      liquidity,
+      analysis.liquiditySweep
+    );
+
+
+    /* FVG */
+
+    const fvg =
+      document.getElementById(
+        "fvg"
+      );
+
+    fvg.textContent =
+      analysis.fvg ||
+      "NONE";
+
+    setDirectionClass(
+      fvg,
+      analysis.fvg
+    );
+
+
+  } catch (error) {
+
+    document.getElementById(
+      "serverStatus"
+    ).textContent =
+      "OFFLINE";
+
+    document.getElementById(
+      "serverStatus"
+    ).className =
+      "offline";
+
+    console.log(
+      error
+    );
+  }
+}
+
+
+async function scanNow() {
+
+  const button =
+    document.getElementById(
+      "scanButton"
+    );
+
+  button.disabled = true;
+
+  button.textContent =
+    "Scanning...";
+
+
+  try {
+
+    await fetch(
+      "/api/scan",
+      {
+        method: "POST"
+      }
+    );
+
+    await loadStatus();
+
+    await loadHistory();
+
+  } catch (error) {
+
+    alert(
+      "Scan failed."
+    );
+
+  } finally {
+
+    button.disabled = false;
+
+    button.textContent =
+      "⚡ Scan Gold Now";
+  }
+}
+
+
+async function loadHistory() {
+
+  try {
+
+    const response =
+      await fetch(
+        "/api/history",
+        {
+          cache: "no-store"
+        }
+      );
+
+    const history =
+      await response.json();
+
+
+    const container =
+      document.getElementById(
+        "historyList"
+      );
+
+
+    if (
+      !history ||
+      history.length === 0
+    ) {
+
+      container.innerHTML =
+        '<p class="small">No BUY/SELL signals saved yet.</p>';
+
+      return;
+    }
+
+
+    container.innerHTML =
+      history
+        .map(signal => {
+
+          return `
+            <div class="history-item">
+
+              <strong>
+                ${signal.type}
+                ${signal.symbol || "XAU/USD"}
+              </strong>
+
+              <div class="small">
+                Confidence:
+                ${signal.confidence}%
+              </div>
+
+              <div class="small">
+                Entry:
+                ${displayValue(signal.entry)}
+              </div>
+
+              <div class="small">
+                SL:
+                ${displayValue(signal.sl)}
+              </div>
+
+              <div class="small">
+                TP1:
+                ${displayValue(signal.tp1)}
+              </div>
+
+              <div class="small">
+                TP2:
+                ${displayValue(signal.tp2)}
+              </div>
+
+              <div class="small">
+                TP3:
+                ${displayValue(signal.tp3)}
+              </div>
+
+              <div class="small">
+                Liquidity:
+                ${signal.liquiditySweep || "NONE"}
+              </div>
+
+              <div class="small">
+                FVG:
+                ${signal.fvg || "NONE"}
+              </div>
+
+              <div class="small">
+                ${signal.time
+                  ? new Date(
+                      signal.time
+                    ).toLocaleString()
+                  : ""}
+              </div>
+
+            </div>
+          `;
+        })
+        .join("");
+
+  } catch (error) {
+
+    console.log(
+      "History error",
+      error
+    );
+  }
+}
+
+
+function urlBase64ToUint8Array(
+  base64String
+) {
+
+  const padding =
+    "=".repeat(
+      (
+        4 -
+        base64String.length % 4
+      ) % 4
+    );
+
+  const base64 =
+    (
+      base64String +
+      padding
+    )
+      .replace(/-/g, "+")
+      .replace(/_/g, "/");
+
+
+  const rawData =
+    window.atob(
+      base64
+    );
+
+
+  return Uint8Array.from(
+    [...rawData]
+      .map(
+        char =>
+          char.charCodeAt(0)
+      )
+  );
+}
+
+
+async function enableNotifications() {
+
+  try {
+
+    if (
+      !(
+        "serviceWorker"
+        in navigator
+      )
+    ) {
+
+      alert(
+        "Service Worker is not supported on this device."
+      );
+
+      return;
+    }
+
+
+    const permission =
+      await Notification
+        .requestPermission();
+
+
+    if (
+      permission !==
+      "granted"
+    ) {
+
+      alert(
+        "Notification permission was not granted."
+      );
+
+      return;
+    }
+
+
+    const registration =
+      await navigator
+        .serviceWorker
+        .register(
+          "/service-worker.js"
+        );
+
+
+    const keyResponse =
+      await fetch(
+        "/api/vapid-public-key"
+      );
+
+
+    const keyData =
+      await keyResponse
+        .json();
+
+
+    if (
+      !keyData.publicKey
+    ) {
+
+      alert(
+        "Notification keys are not configured on Railway yet."
+      );
+
+      return;
+    }
+
+
+    const subscription =
+      await registration
+        .pushManager
+        .subscribe({
+
+          userVisibleOnly:
+            true,
+
+          applicationServerKey:
+            urlBase64ToUint8Array(
+              keyData.publicKey
+            )
+        });
+
+
+    await fetch(
+      "/api/subscribe",
+      {
+
+        method: "POST",
+
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
+
+        body:
+          JSON.stringify(
+            subscription
+          )
+      }
+    );
+
+
+    alert(
+      "Notifications enabled successfully."
+    );
+
+
+  } catch (error) {
+
+    alert(
+      "Notification setup failed: " +
+      error.message
+    );
+  }
+}
+
+
+async function testNotification() {
+
+  try {
+
+    const response =
+      await fetch(
+        "/api/test-notification",
+        {
+          method: "POST"
+        }
+      );
+
+
+    const result =
+      await response.json();
+
+
+    if (
+      response.ok
+    ) {
+
+      alert(
+        "Test notification sent."
+      );
+
+    } else {
+
+      alert(
+        result.error ||
+        "Notification test failed."
+      );
+    }
+
+  } catch (error) {
+
+    alert(
+      "Notification test failed."
+    );
+  }
+}
+
+
+loadStatus();
+
+loadHistory();
+
+
+setInterval(
+  loadStatus,
+  30000
+);
+
+</script>
+
+</body>
+</html>
